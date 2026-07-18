@@ -130,6 +130,27 @@
     animation:chefGlow 1.4s ease-in-out infinite;
   }
   @keyframes chefGlow{0%,100%{filter:brightness(1);}50%{filter:brightness(1.25);}}
+  .cell.wild-block{ outline:2px dashed rgba(36,21,5,0.55); outline-offset:-5px; }
+
+  /* ---------- SCORE SPLASH ---------- */
+  .splash{
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) scale(0.6);
+    z-index:30; pointer-events:none; text-align:center;
+    font-family:'Arial Black','Helvetica Neue',sans-serif; font-weight:900;
+    opacity:0; white-space:nowrap;
+    animation:splashPop 1.15s cubic-bezier(.2,.9,.3,1.1) forwards;
+  }
+  .splash .big{ font-size:2.2rem; letter-spacing:1px; text-shadow:0 3px 10px rgba(0,0,0,0.5); }
+  .splash .small{ font-size:0.85rem; letter-spacing:2px; margin-top:2px; }
+  .splash.bonus .big, .splash.bonus .small{ color:var(--green); }
+  .splash.penalty .big, .splash.penalty .small{ color:var(--red); }
+  @keyframes splashPop{
+    0%{ opacity:0; transform:translate(-50%,-50%) scale(0.5); }
+    18%{ opacity:1; transform:translate(-50%,-50%) scale(1.15); }
+    32%{ transform:translate(-50%,-50%) scale(1); }
+    75%{ opacity:1; transform:translate(-50%,-78%) scale(0.95); }
+    100%{ opacity:0; transform:translate(-50%,-120%) scale(0.85); }
+  }
   .cell.preview-valid{ box-shadow:inset 0 0 0 2px var(--green); background:#37503E; }
   .cell.preview-invalid{ box-shadow:inset 0 0 0 2px var(--red); background:#523232; }
   .cell.blocked{ background:repeating-linear-gradient(45deg,#3C2A2A,#3C2A2A 6px,#4A3232 6px,#4A3232 12px); }
@@ -192,6 +213,7 @@
     background:var(--bg-1); border:1px solid var(--steel-line); border-radius:14px;
     padding:24px 22px; max-width:420px; width:100%; text-align:center;
     box-shadow:0 14px 40px rgba(0,0,0,0.5);
+    max-height:90vh; overflow-y:auto; -webkit-overflow-scrolling:touch;
   }
   .card h1{ font-size:1.35rem; margin:0 0 4px; color:var(--copper); }
   .candle{ font-size:1.7rem; margin-bottom:2px; animation:flicker 1.6s ease-in-out infinite; }
@@ -250,17 +272,27 @@
 <div class="screen" id="startScreen">
   <div class="card">
     <div class="candle" aria-hidden="true">🕯️</div>
-    <h1 class="shout">Chef Tom</h1>
+    <h1 class="shout">👨‍🍳 Chef Tom</h1>
     <div class="sub">🎂 Gefeliciteerd met je verjaardag!</div>
-    <p>Verjaardagscadeau: jouw eigen sterrenkeuken. Sleep ingrediënten (<b>polyomino-vormen</b>) op de werkbank en vul volledige rijen of kolommen om ze weg te werken.</p>
-    <p>De keuken loopt niet altijd op rolletjes: bij een <b>keuken-crash</b> (🔴 alarm) moet je snel schakelen. Bij een <b>gelukje</b> (🟢 bonus) profiteer je juist.</p>
-    <p>Draai een ingrediënt met de <b>↻</b>-knop op zijn kaart voordat je sleept.</p>
-    <label style="font-size:0.75rem; color:var(--cream-dim); letter-spacing:1px;">DUUR VAN DE DIENST</label>
+    <p>🎁 Verjaardagscadeau: jouw eigen sterrenkeuken. Sleep ingrediënten op de werkbank en vul volledige rijen of kolommen om ze weg te werken.</p>
+    <p>De keuken loopt niet altijd op rolletjes:<br>🔴 bij een <b>keuken-crash</b> (alarm) moet je snel schakelen.<br>🟢 bij een <b>gelukje</b> (bonus) profiteer je juist.</p>
+    <p>↻ Draai een ingrediënt met de <b>↻</b>-knop op zijn kaart voordat je sleept.</p>
+    <label style="font-size:0.75rem; color:var(--cream-dim); letter-spacing:1px;">⏱ DUUR VAN DE DIENST</label>
     <select id="durationSelect">
-      <option value="120">Snelle lunchdienst — 2:00</option>
-      <option value="180" selected>Volledige dienst — 3:00</option>
-      <option value="240">Marathon-service — 4:00</option>
+      <option value="120">Lunch — 2:00</option>
+      <option value="240" selected>Dinner — 4:00</option>
+      <option value="360">Michelin Ster menu — 6:00</option>
     </select>
+    <p><b>Gescheiden productgroepen</b> voor extra punten of strafpunten:<br>
+    🔴 Rood – Rauw vlees 🥩 → punten × 3<br>
+    🔵 Blauw – Vis 🐟 en schaaldieren 🦐 → punten × 2<br>
+    🟡 Geel – Ei 🥚 en kaas 🧀 → punten × 2<br>
+    🟢 Groen/Wit – Groenten, fruit en kruiden: 🍅 🥬 🌿 🍋 🍄 → punten × 1</p>
+    <p>⭐ <b>Bonusregel:</b> een volledige rij of kolom uit één productgroep geeft de bijbehorende vermenigvuldiging.</p>
+    <p>⚠️ <b>Strafregel:</b> een rij of kolom met verschillende productgroepen door elkaar halveert je punten (naar beneden afgerond).</p>
+    <p>🍽️ <b>Emoticon-bord</b> mag overal geplaatst worden.<br>
+    👨‍🍳 <b>Chef-bonus</b> met foto van Tom (1 blokje) verschijnt op 3 willekeurige plekken — elk blokje mag je 1x verplaatsen.<br>
+    Bord en Chef-bonus vullen elke productgroep aan: staan ze bijvoorbeeld in een rode rij, dan telt die nog steeds als × 3, enzovoort.</p>
     <button class="bigbtn" id="startBtn">Start de dienst, Chef Tom</button>
   </div>
 </div>
@@ -285,17 +317,19 @@
 /* ============ CONFIG ============ */
 var COLS=8, ROWS=8;
 var SPEECH_LANG='nl-NL';
+var GROUP_MULT={red:3, blue:2, yellow:2, green:1};
 var INGREDIENTS=[
-  {emoji:'🍅', color:'#D14B4B'},
-  {emoji:'🥬', color:'#4F9E68'},
-  {emoji:'🐟', color:'#4E86B8'},
-  {emoji:'🧀', color:'#E0A83E'},
-  {emoji:'🌿', color:'#5FAE55'},
-  {emoji:'🥩', color:'#B05A3C'},
-  {emoji:'🥚', color:'#E3CE8C'},
-  {emoji:'🍋', color:'#D9C13E'},
-  {emoji:'🍄', color:'#9C7B5C'},
-  {emoji:'🦐', color:'#D98268'}
+  {emoji:'🍅', color:'#D14B4B', group:'green'},
+  {emoji:'🥬', color:'#4F9E68', group:'green'},
+  {emoji:'🐟', color:'#4E86B8', group:'blue'},
+  {emoji:'🧀', color:'#E0A83E', group:'yellow'},
+  {emoji:'🌿', color:'#5FAE55', group:'green'},
+  {emoji:'🥩', color:'#B05A3C', group:'red'},
+  {emoji:'🥚', color:'#E3CE8C', group:'yellow'},
+  {emoji:'🍋', color:'#D9C13E', group:'green'},
+  {emoji:'🍄', color:'#9C7B5C', group:'green'},
+  {emoji:'🦐', color:'#D98268', group:'blue'},
+  {emoji:'🍽️', color:'#D8D2C2', group:'wild'}
 ];
 
 var SHAPES=[
@@ -346,6 +380,7 @@ var state={
 
 /* ============ DOM ============ */
 var boardEl=document.getElementById('board');
+var boardWrapEl=document.getElementById('boardWrap');
 var trayEl=document.getElementById('tray');
 var ghostEl=document.getElementById('ghost');
 var scoreVal=document.getElementById('scoreVal');
@@ -393,6 +428,11 @@ function sfxPositive(){ beep(523,0.12,'sine',0.14); beep(659,0.12,'sine',0.14,0.
 function sfxTick(){ beep(880,0.05,'square',0.06); }
 function sfxGameOver(){ beep(300,0.3,'sawtooth',0.14); beep(220,0.4,'sawtooth',0.14,0.25); beep(140,0.5,'sawtooth',0.14,0.5); }
 function sfxRoundWin(){ beep(523,0.15,'sine',0.15); beep(659,0.15,'sine',0.15,0.15); beep(784,0.15,'sine',0.15,0.3); beep(1047,0.3,'sine',0.16,0.45); }
+function sfxBonus(mult){
+  var steps=Math.max(2, Math.min(4, mult));
+  for(var i=0;i<steps;i++){ beep(660+i*160,0.14,'triangle',0.17,i*0.07); }
+}
+function sfxPenalty(){ beep(260,0.22,'sawtooth',0.15); beep(180,0.32,'sawtooth',0.15,0.14); }
 
 function speak(text){
   if(state.muted) return;
@@ -427,6 +467,15 @@ function buildBoardDOM(){
   }
 }
 function cellEl(r,c){ return boardEl.children[r*COLS+c]; }
+function spawnSplash(kind, bigText, smallText, delay){
+  setTimeout(function(){
+    var el=document.createElement('div');
+    el.className='splash '+kind;
+    el.innerHTML='<div class="big">'+bigText+'</div><div class="small">'+smallText+'</div>';
+    boardWrapEl.appendChild(el);
+    setTimeout(function(){ el.remove(); }, 1250);
+  }, delay||0);
+}
 function renderBoard(){
   for(var r=0;r<ROWS;r++){
     for(var c=0;c<COLS;c++){
@@ -437,11 +486,13 @@ function renderBoard(){
       if(v){
         el.classList.add('filled');
         el.classList.toggle('chef-block', !!v.chef);
+        el.classList.toggle('wild-block', !!(v.group==='wild' && !v.chef));
         el.style.background=v.color;
         el.textContent=v.emoji;
       } else {
         el.classList.remove('filled');
         el.classList.remove('chef-block');
+        el.classList.remove('wild-block');
         el.style.background='';
         el.textContent='';
       }
@@ -477,7 +528,7 @@ function weightedShapeIndex(){
 function makePiece(){
   var shape=normalize(SHAPES[weightedShapeIndex()]);
   var ing=INGREDIENTS[Math.floor(Math.random()*INGREDIENTS.length)];
-  return {cells:shape, emoji:ing.emoji, color:ing.color, id:Math.random().toString(36).slice(2)};
+  return {cells:shape, emoji:ing.emoji, color:ing.color, group:ing.group, id:Math.random().toString(36).slice(2)};
 }
 function refillTray(){
   for(var i=0;i<3;i++){
@@ -565,14 +616,13 @@ function placePiece(idx, r0, c0){
   var piece=state.tray[idx];
   if(!piece || !canPlace(piece.cells,r0,c0)) return false;
   piece.cells.forEach(function(p){
-    state.board[r0+p[0]][c0+p[1]]={emoji:piece.emoji, color:piece.color};
+    state.board[r0+p[0]][c0+p[1]]={emoji:piece.emoji, color:piece.color, group:piece.group};
   });
   addScore(piece.cells.length*2);
   state.tray[idx]=null;
   sfxPlace();
   renderBoard();
-  var cleared=clearLines();
-  if(cleared>0){ speakSometimesClear(cleared); }
+  clearLines();
   if(state.tray.every(function(p){return !p;})){
     setTimeout(refillTray, 120);
   } else {
@@ -582,6 +632,22 @@ function placePiece(idx, r0, c0){
   return true;
 }
 
+function computeLineScore(cellsArr){
+  var groupsSeen={}, groupCount=0;
+  for(var i=0;i<cellsArr.length;i++){
+    var v=cellsArr[i];
+    if(v && v.group && v.group!=='wild'){
+      if(!groupsSeen[v.group]){ groupsSeen[v.group]=true; groupCount++; }
+    }
+  }
+  var base=10;
+  if(groupCount<=1){
+    var key=Object.keys(groupsSeen)[0];
+    var mult=key ? (GROUP_MULT[key]||1) : 1;
+    return {points:base*mult, mult:mult, mixed:false};
+  }
+  return {points:Math.floor(base/2), mult:0.5, mixed:true};
+}
 function clearLines(){
   var fullRows=[], fullCols=[];
   for(var r=0;r<ROWS;r++){
@@ -598,9 +664,25 @@ function clearLines(){
   fullRows.forEach(function(r){ for(var c=0;c<COLS;c++){ cellEl(r,c).classList.add('clearing'); } });
   fullCols.forEach(function(c){ for(var r=0;r<ROWS;r++){ cellEl(r,c).classList.add('clearing'); } });
 
-  var mult=Date.now()<state.multiplierUntil ? 2 : 1;
-  var basePoints=total*10 + (total>1 ? (total-1)*15 : 0);
-  addScore(basePoints*mult);
+  var globalMult=Date.now()<state.multiplierUntil ? 2 : 1;
+  var sumPoints=0, hadPenalty=false, bestBonusMult=0;
+  fullRows.forEach(function(r){
+    var cellsArr=[]; for(var c=0;c<COLS;c++){ cellsArr.push(state.board[r][c]); }
+    var res=computeLineScore(cellsArr);
+    sumPoints+=res.points;
+    if(res.mixed) hadPenalty=true; else if(res.mult>bestBonusMult) bestBonusMult=res.mult;
+  });
+  fullCols.forEach(function(c){
+    var cellsArr=[]; for(var r2=0;r2<ROWS;r2++){ cellsArr.push(state.board[r2][c]); }
+    var res=computeLineScore(cellsArr);
+    sumPoints+=res.points;
+    if(res.mixed) hadPenalty=true; else if(res.mult>bestBonusMult) bestBonusMult=res.mult;
+  });
+  var hadBonus=bestBonusMult>1;
+
+  var comboBonus=total>1 ? (total-1)*15 : 0;
+  var finalPoints=Math.floor((sumPoints+comboBonus)*globalMult);
+  addScore(finalPoints);
   state.linesCleared+=total;
 
   setTimeout(function(){
@@ -611,11 +693,25 @@ function clearLines(){
 
   sfxClear(total);
   if(navigator.vibrate) navigator.vibrate(total>1?[40,30,40]:30);
-  return total;
-}
-function speakSometimesClear(n){
-  if(n>=2) speak(n>=3 ? 'Perfecte miez en plaz!' : 'Mooi bord!');
 
+  if(hadBonus){
+    spawnSplash('bonus', '×'+bestBonusMult, 'BONUS! +'+finalPoints, 80);
+    sfxBonus(bestBonusMult);
+  }
+  if(hadPenalty){
+    spawnSplash('penalty', '½', 'GEMENGD — STRAF', hadBonus?620:80);
+    sfxPenalty();
+  }
+  if(hadBonus && hadPenalty){
+    speak('Bonus keer '+bestBonusMult+', maar ook gemengde productgroepen met halve punten!');
+  } else if(hadBonus){
+    speak(bestBonusMult+' keer bonus!');
+  } else if(hadPenalty){
+    speak('Gemengde productgroepen, punten gehalveerd!');
+  } else if(total>=2){
+    speak(total>=3 ? 'Perfecte mies an plaz!' : 'Mooi bord!');
+  }
+  return total;
 }
 
 function addScore(n){
@@ -636,11 +732,37 @@ function attachDrag(slotEl, idx){
     var cellPx=boardRect.width/COLS;
     var bounds=shapeBounds(piece.cells);
     drag={
-      idx:idx, piece:piece, cellPx:cellPx, bounds:bounds,
+      source:'tray', idx:idx, piece:piece, cellPx:cellPx, bounds:bounds,
       offsetX:bounds.cols*cellPx/2, offsetY:bounds.rows*cellPx/2 + cellPx*1.6,
       slotEl:slotEl
     };
     slotEl.classList.add('dragging');
+    buildGhost(piece, cellPx);
+    moveGhost(ev.clientX, ev.clientY);
+    ghostEl.style.display='grid';
+    window.addEventListener('pointermove', onDragMove);
+    window.addEventListener('pointerup', onDragEnd);
+    ev.preventDefault();
+  });
+}
+function attachBoardDrag(){
+  boardEl.addEventListener('pointerdown', function(ev){
+    if(state.paused || !state.running || state.frozen) return;
+    var target=ev.target.closest('.cell');
+    if(!target) return;
+    var r=parseInt(target.dataset.r,10), c=parseInt(target.dataset.c,10);
+    var v=state.board[r][c];
+    if(!v || !v.chef || v.moved) return;
+    ensureAudio();
+    var boardRect=boardEl.getBoundingClientRect();
+    var cellPx=boardRect.width/COLS;
+    var piece={cells:[[0,0]], emoji:v.emoji, color:v.color};
+    drag={
+      source:'board', originR:r, originC:c, piece:piece, cellPx:cellPx, bounds:{rows:1,cols:1},
+      offsetX:cellPx/2, offsetY:cellPx/2 + cellPx*1.6
+    };
+    state.board[r][c]=null;
+    renderBoard();
     buildGhost(piece, cellPx);
     moveGhost(ev.clientX, ev.clientY);
     ghostEl.style.display='grid';
@@ -702,10 +824,24 @@ function onDragEnd(ev){
   window.removeEventListener('pointermove', onDragMove);
   window.removeEventListener('pointerup', onDragEnd);
   ghostEl.style.display='none';
-  drag.slotEl.classList.remove('dragging');
   var placed=false;
-  if(drag.lastTarget && drag.lastOk){
-    placed=placePiece(drag.idx, drag.lastTarget.r, drag.lastTarget.c);
+  if(drag.source==='tray'){
+    drag.slotEl.classList.remove('dragging');
+    if(drag.lastTarget && drag.lastOk){
+      placed=placePiece(drag.idx, drag.lastTarget.r, drag.lastTarget.c);
+    }
+  } else if(drag.source==='board'){
+    if(drag.lastTarget && drag.lastOk){
+      var sameSpot=(drag.lastTarget.r===drag.originR && drag.lastTarget.c===drag.originC);
+      state.board[drag.lastTarget.r][drag.lastTarget.c]={emoji:drag.piece.emoji, color:drag.piece.color, chef:true, moved:!sameSpot, group:'wild'};
+      renderBoard();
+      clearLines();
+      setTimeout(checkGameOver, 30);
+      placed=true;
+    } else {
+      state.board[drag.originR][drag.originC]={emoji:drag.piece.emoji, color:drag.piece.color, chef:true, moved:false, group:'wild'};
+      renderBoard();
+    }
   }
   drag=null;
   if(!placed){ /* snap back visually handled by re-render */ }
@@ -764,8 +900,6 @@ function triggerEvent(){
   pool.push('souschef');
   pool.push('goedkeuring');
   if(Object.keys(state.blocked).length>0) pool.push('perfect');
-  var giftCells=pickGiftCells(3);
-  if(giftCells.length>0) pool.push('chefgift');
 
   var choice=pool[Math.floor(Math.random()*pool.length)];
 
@@ -811,23 +945,32 @@ function triggerEvent(){
     state.blocked={};
     renderBoard();
     showTicket('pos','PERFECTE MISE EN PLACE','Alles weer op orde.','Blokkades opgeruimd.', 3000);
-    speak('Perfecte mise en place, alles weer op orde!');
-  } else if(choice==='chefgift'){
-    sfxPositive();
-    var giftPts=0;
-    giftCells.forEach(function(rc){
-      state.board[rc[0]][rc[1]]={emoji:'👨‍🍳', color:'#E0A83E', chef:true};
-      giftPts+=15;
-    });
-    addScore(giftPts);
-    renderBoard();
-    var giftCleared=clearLines();
-    if(giftCleared>0) speakSometimesClear(giftCleared);
-    showTicket('pos','CADEAU VAN DE CHEF','Drie handtekening-blokjes van Chef Tom zelf!','+'+giftPts+' punten bonus.', 4000);
-    speak('Een cadeau van de chef zelf! Drie speciale blokjes op de werkbank.');
-    setTimeout(checkGameOver, 30);
+    speak('Perfecte mies an plaz, alles weer op orde!');
   }
   scheduleNextEvent();
+}
+function triggerChefGift(){
+  var giftCells=pickGiftCells(3);
+  if(giftCells.length===0) return false;
+  sfxPositive();
+  var giftPts=0;
+  giftCells.forEach(function(rc){
+    state.board[rc[0]][rc[1]]={emoji:'👨‍🍳', color:'#E0A83E', chef:true, moved:false, group:'wild'};
+    giftPts+=15;
+  });
+  addScore(giftPts);
+  renderBoard();
+  var giftCleared=clearLines();
+  showTicket('pos','CADEAU VAN DE CHEF','Drie handtekening-blokjes van Chef Tom zelf!','+'+giftPts+' punten bonus. Sleep ze één keer vrij naar een nieuwe plek.', 5000);
+  speak('Een cadeau van de chef zelf! Sleep de drie speciale blokjes één keer vrij naar een nieuwe plek.');
+  setTimeout(checkGameOver, 30);
+  return true;
+}
+function scheduleChefGift(){
+  var earliest=15, latest=Math.max(earliest+10, ROUND_LEN-15);
+  var delay=earliest+Math.random()*(latest-earliest);
+  state.chefGiftAt=Date.now()+delay*1000;
+  state.chefGiftGiven=false;
 }
 function scheduleNextEvent(){
   var elapsedFactor=Math.max(0, ROUND_LEN-state.timeLeft)/ROUND_LEN;
@@ -861,6 +1004,11 @@ function loop(ts){
     if(changed) renderBoard();
 
     if(Date.now()>=state.multiplierUntil){ multStrip.classList.remove('on'); }
+
+    if(!state.chefGiftGiven && Date.now()>=state.chefGiftAt){
+      var ok=triggerChefGift();
+      if(ok){ state.chefGiftGiven=true; } else { state.chefGiftAt=Date.now()+5000; }
+    }
 
     if(Date.now()>=state.nextEventAt){ triggerEvent(); }
   } else {
@@ -904,6 +1052,7 @@ function startRound(){
   startScreen.classList.add('hide');
   endScreen.classList.add('hide');
   scheduleNextEvent();
+  scheduleChefGift();
   speak('Gefeliciteerd gezel-meester chef Tom! De mies an plaz service begint.');
   if(state.rafId) cancelAnimationFrame(state.rafId);
   state.rafId=requestAnimationFrame(loop);
@@ -959,6 +1108,7 @@ if(window.speechSynthesis){
 }
 
 buildBoardDOM();
+attachBoardDrag();
 })();
 </script>
 </body>
