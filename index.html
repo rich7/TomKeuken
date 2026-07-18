@@ -614,7 +614,8 @@ function clearLines(){
   return total;
 }
 function speakSometimesClear(n){
-  if(n>=2) speak(n>=3 ? 'Perfecte mise en place!' : 'Mooi bord!');
+  if(n>=2) speak(n>=3 ? 'Perfecte miez en plaz!' : 'Mooi bord!');
+
 }
 
 function addScore(n){
@@ -903,7 +904,7 @@ function startRound(){
   startScreen.classList.add('hide');
   endScreen.classList.add('hide');
   scheduleNextEvent();
-  speak('Gefeliciteerd gezel-meester chef Tom! De mise en place service begint.');
+  speak('Gefeliciteerd gezel-meester chef Tom! De mies an plaz service begint.');
   if(state.rafId) cancelAnimationFrame(state.rafId);
   state.rafId=requestAnimationFrame(loop);
 }
