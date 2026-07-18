@@ -18,7 +18,7 @@
     --red:#D14B4B;
     --red-dim:#5C2222;
     --green:#4F9E68;
-    --green-dim:#2E3C28;
+    --green-dim:#1E3C28;
     --amber:#E0A83E;
     font-size:16px;
   }
@@ -1081,7 +1081,7 @@ function endRound(timeUp){
   if(timeUp){ sfxRoundWin(); speak(stars>=2?'Uitstekende dienst, Chef Tom!':'Dienst voltooid, Chef Tom.'); }
   else { sfxGameOver(); speak('De werkbank loopt vast, service onderbroken, Chef Tom.'); }
   if(navigator.vibrate) navigator.vibrate(timeUp?[60,40,60,40,120]:[200]);
-}
+} 
 
 /* ============ UI CONTROLS ============ */
 document.getElementById('startBtn').addEventListener('click', function(){
