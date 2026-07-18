@@ -219,7 +219,7 @@
   .candle{ font-size:1.7rem; margin-bottom:2px; animation:flicker 1.6s ease-in-out infinite; }
   @keyframes flicker{0%,100%{opacity:1; transform:scale(1) rotate(0deg);}50%{opacity:0.78; transform:scale(0.93) rotate(-3deg);}}
   .card .sub{ color:var(--cream-dim); font-size:0.85rem; margin-bottom:16px; }
-  .card p{ font-size:0.88rem; line-height:1.55; color:#DCD6C8; text-align:left; margin:8px 0; }
+  .card p{ font-size:0.86rem; line-height:1.42; color:#DCD6C8; text-align:left; margin:7px 0; }
   .card p b{ color:var(--copper); }
   select, .bigbtn{
     width:100%; font-size:1rem; padding:12px; border-radius:10px; border:1px solid var(--steel-line);
@@ -273,26 +273,24 @@
   <div class="card">
     <div class="candle" aria-hidden="true">🕯️</div>
     <h1 class="shout">👨‍🍳 Chef Tom</h1>
-    <div class="sub">🎂 Gefeliciteerd met je verjaardag!</div>
-    <p>🎁 Verjaardagscadeau: jouw eigen sterrenkeuken. Sleep ingrediënten op de werkbank en vul volledige rijen of kolommen om ze weg te werken.</p>
-    <p>De keuken loopt niet altijd op rolletjes:<br>🔴 bij een <b>keuken-crash</b> (alarm) moet je snel schakelen.<br>🟢 bij een <b>gelukje</b> (bonus) profiteer je juist.</p>
-    <p>↻ Draai een ingrediënt met de <b>↻</b>-knop op zijn kaart voordat je sleept.</p>
+    <div class="sub">🎂 Gefeliciteerd met je verjaardag! 🎁 Jouw eigen sterrenkeuken.</div>
+    <p>Sleep ingrediënten op de werkbank en vul volledige rijen of kolommen om ze weg te werken.<br>
+    🔴 bij een keuken-crash (alarm) moet je snel schakelen.<br>
+    🟢 bij een gelukje (bonus) profiteer je juist.<br>
+    ↻ Draai een ingrediënt met de ↻-knop op zijn kaart voordat je sleept.</p>
     <label style="font-size:0.75rem; color:var(--cream-dim); letter-spacing:1px;">⏱ DUUR VAN DE DIENST</label>
     <select id="durationSelect">
-      <option value="120">Lunch — 2:00</option>
-      <option value="240" selected>Dinner — 4:00</option>
-      <option value="360">Michelin Ster menu — 6:00</option>
+      <option value="120">Lunch — 2 minuten</option>
+      <option value="240" selected>Dinner — 4 minuten</option>
+      <option value="360">Michelin Ster menu — 6 minuten</option>
     </select>
-    <p><b>Gescheiden productgroepen</b> voor extra punten of strafpunten:<br>
-    🔴 Rood – Rauw vlees 🥩 → punten × 3<br>
-    🔵 Blauw – Vis 🐟 en schaaldieren 🦐 → punten × 2<br>
-    🟡 Geel – Ei 🥚 en kaas 🧀 → punten × 2<br>
-    🟢 Groen/Wit – Groenten, fruit en kruiden: 🍅 🥬 🌿 🍋 🍄 → punten × 1</p>
-    <p>⭐ <b>Bonusregel:</b> een volledige rij of kolom uit één productgroep geeft de bijbehorende vermenigvuldiging.</p>
-    <p>⚠️ <b>Strafregel:</b> een rij of kolom met verschillende productgroepen door elkaar halveert je punten (naar beneden afgerond).</p>
-    <p>🍽️ <b>Emoticon-bord</b> mag overal geplaatst worden.<br>
-    👨‍🍳 <b>Chef-bonus</b> met foto van Tom (1 blokje) verschijnt op 3 willekeurige plekken — elk blokje mag je 1x verplaatsen.<br>
-    Bord en Chef-bonus vullen elke productgroep aan: staan ze bijvoorbeeld in een rode rij, dan telt die nog steeds als × 3, enzovoort.</p>
+    <p><b>Productgroepen en punten:</b><br>
+    🔴 Rood: Vlees 🥩 → × 3<br>
+    🔵 Blauw: Vis 🐟 en schaaldieren 🦐 → × 2<br>
+    🟡 Geel: Ei 🥚 en kaas 🧀 → × 2<br>
+    🟢 Groen: Groenten, fruit, kruiden 🍅 🥬 🌿 🍋 🍄</p>
+    <p>⚠️ Gemengde groepen in een rij/kolom: punten gehalveerd.</p>
+    <p>👨‍🍳 Chef-bonus en 🍽️ Bord mogen overal geplaatst worden.</p>
     <button class="bigbtn" id="startBtn">Start de dienst, Chef Tom</button>
   </div>
 </div>
@@ -1081,7 +1079,7 @@ function endRound(timeUp){
   if(timeUp){ sfxRoundWin(); speak(stars>=2?'Uitstekende dienst, Chef Tom!':'Dienst voltooid, Chef Tom.'); }
   else { sfxGameOver(); speak('De werkbank loopt vast, service onderbroken, Chef Tom.'); }
   if(navigator.vibrate) navigator.vibrate(timeUp?[60,40,60,40,120]:[200]);
-} 
+}
 
 /* ============ UI CONTROLS ============ */
 document.getElementById('startBtn').addEventListener('click', function(){
@@ -1102,7 +1100,10 @@ muteBtn.addEventListener('click', function(){
   muteBtn.textContent=state.muted?'🔇':'🔊';
   if(state.muted && window.speechSynthesis) window.speechSynthesis.cancel();
 });
-document.addEventListener('touchmove', function(e){ e.preventDefault(); }, {passive:false});
+document.addEventListener('touchmove', function(e){
+  if(e.target.closest('.card')) return;
+  e.preventDefault();
+}, {passive:false});
 if(window.speechSynthesis){
   window.speechSynthesis.onvoiceschanged=function(){};
 }
